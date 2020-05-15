@@ -1,25 +1,16 @@
-const express = require('express');
-const app = express();
-const cors= require('cors');
+'use strict'
 
+const mongoose = require('mongoose')
+const app = require('./app')
+const config = require('./config')
 
+mongoose.connect(config.db, (err, res) => {
+  if (err) {
+    return console.log(`Error al conectar a la base de datos: ${err}`)
+  }
+  console.log('Conexión a la base de datos establecida...')
 
-require('./database');
-
-app.set('port', process.env.PORT || 3000);
-// middlewares
-app.use(cors());
-app.use(express.json());
-
-app.use('/api', require('./routes/index'));
-app.use('/grupos', require('./routes/groupsRoutes'));
-
-
-//starting the server
-app.listen(app.get('port'), () => {
-   console.log('Server on port 3000, Yes');
-});
-
-/*app.get('', (req, res) => {
-    res.send('Hola Mundo');
-    });*/
+  app.listen(config.port, () => {
+    console.log(`API REST corriendo en http://localhost:${config.port}`)
+  })
+})
